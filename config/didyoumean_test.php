@@ -17,6 +17,4 @@
     $config['Didyoumean']['help'] = true;
     // Default language when Configure::read('language'); returns false
     $config['Didyoumean']['language'] = 'eng';
-
-
 ?>

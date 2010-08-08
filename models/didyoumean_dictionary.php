@@ -64,9 +64,11 @@ class DidyoumeanDictionary extends DidyoumeanAppModel {
 
     function getRelatedWords($search_string) {
         if (Configure::read('Didyoumean.get_related_words')) {
+            $this->writelog('started: ' . __FUNCTION__ . ' with: ' . print_r(func_get_args(),true), 'didyoumean');
             if (Configure::read('Didyoumean.use_cache')) {
                 $list = Cache::read('getWordsContaining_'.$search_string);
                 if ($list !== false) {
+                    $this->writelog('ended: ' . __FUNCTION__ . ' with: ' . print_r($link,true), 'didyoumean');
                     return $list;
                 }
             }
@@ -82,9 +84,9 @@ class DidyoumeanDictionary extends DidyoumeanAppModel {
             if (Configure::read('Didyoumean.use_cache')) {
                 Cache::write('getWordsContaining_'.$search_string,$result);
             }
+            $this->writelog('ended: ' . __FUNCTION__ . ' with: ' . print_r($result,true), 'didyoumean');
             return $result;
         }
-
     }
 
     /*
@@ -98,6 +100,7 @@ class DidyoumeanDictionary extends DidyoumeanAppModel {
     //write log (only if debug == true)
         $this->writelog('started: ' . __FUNCTION__ . ' with: ' . print_r(func_get_args(),true), 'didyoumean');
         // check for cache (only if use_cache == true)
+        $search_string = strtolower($search_string);
         if (Configure::read('Didyoumean.use_cache')) {
             $list = Cache::read('didYouMean_'.$search_string,'didyoumean');
             if ($list !== false) {
