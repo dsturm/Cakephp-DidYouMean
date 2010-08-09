@@ -16,7 +16,7 @@ class DidyoumeanController extends DidyoumeanAppController {
 
     function search($string,$record = true) {
 
-        if(Configure::read('Didyoumean.enabled')) {
+        if(Configure::read('Didyoumean.enabled') && $string != '') {
             $string = strtolower($string);
             if(Configure::read('language') != false){
                 // look for application language
