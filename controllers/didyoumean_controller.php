@@ -3,6 +3,7 @@ class DidyoumeanController extends DidyoumeanAppController {
 
     var $name = 'Didyoumean';
     var $uses = array('Didyoumean.DidyoumeanSearch','Didyoumean.DidyoumeanDictionary','Didyoumean.DidyoumeanChoice','Didyoumean.DidyoumeanLanguage');
+    var $helpers = array('xml');
 
     function beforeFilter() {
         Configure::load('Didyoumean.didyoumean');
@@ -63,6 +64,13 @@ class DidyoumeanController extends DidyoumeanAppController {
             return false;
         }
 
+    }
+    
+    function getXML($string){
+        Configure::write('debug',0);
+        $this->layout = null;
+        $output = $this->search($string);
+        $this->set('output',$output);    
     }
 
     function suggestion() {
