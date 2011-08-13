@@ -3,12 +3,12 @@ class DidyoumeanLanguagesController extends DidyoumeanAppController {
 
 	var $name = 'DidyoumeanLanguages';
 
-	function index() {
+	function admin_index() {
 		$this->DidyoumeanLanguage->recursive = 0;
 		$this->set('didyoumeanLanguages', $this->paginate());
 	}
 
-	function view($id = null) {
+	function admin_view($id = null) {
 		if (!$id) {
 			$this->Session->setFlash(__('Invalid didyoumean language', true));
 			$this->redirect(array('action' => 'index'));
@@ -16,7 +16,7 @@ class DidyoumeanLanguagesController extends DidyoumeanAppController {
 		$this->set('didyoumeanLanguage', $this->DidyoumeanLanguage->read(null, $id));
 	}
 
-	function add() {
+	function admin_add() {
 		if (!empty($this->data)) {
 			$this->DidyoumeanLanguage->create();
 			if ($this->DidyoumeanLanguage->save($this->data)) {
@@ -28,7 +28,7 @@ class DidyoumeanLanguagesController extends DidyoumeanAppController {
 		}
 	}
 
-	function edit($id = null) {
+	function admin_edit($id = null) {
 		if (!$id && empty($this->data)) {
 			$this->Session->setFlash(__('Invalid didyoumean language', true));
 			$this->redirect(array('action' => 'index'));
@@ -46,7 +46,7 @@ class DidyoumeanLanguagesController extends DidyoumeanAppController {
 		}
 	}
 
-	function delete($id = null) {
+	function admin_delete($id = null) {
 		if (!$id) {
 			$this->Session->setFlash(__('Invalid id for didyoumean language', true));
 			$this->redirect(array('action'=>'index'));

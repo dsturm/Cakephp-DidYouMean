@@ -31,15 +31,15 @@ class DidYouMeanHelper extends AppHelper {
 
     function suggestionLink($input,$htmlAttributes = null) {
     // Should not make a link for a suggestion if it's match
-        if ($input['type'] != 'match') {
-            $link = $this->Html->link(__(sprintf('Did you mean "%s"?',
+	if ($input['type'] != 'match') {
+            $link = $this->Html->link(__(sprintf($input['text'],
                 $input['suggestion_string']),true),
                 array(
                 'plugin' => 'didyoumean',
                 'controller' => 'didyoumean',
                 'action' => 'suggestion',
                 'suggestion_string' => $input['suggestion_string'],
-                'suggestion_id' => $input['suggestion_id'],
+                'suggestion_id' => @$input['suggestion_id'],
                 'search_id' => $input['search_id']
                 ),
                 $htmlAttributes
@@ -57,8 +57,8 @@ class DidYouMeanHelper extends AppHelper {
                 !in_array($suggestion['suggestion_string'], $search_strings)
             ) {
                 $output .= $this->suggestionLink($suggestion);
-                $search_strings[] = $suggestion['suggestion_string'];
-                $output .= $link . "<br/>";
+                $search_strings[] = $suggestion['suggestion_string'] ;
+                $output .= $link . "<br/><br/>";
                 
             }
 

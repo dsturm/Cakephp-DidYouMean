@@ -3,7 +3,8 @@
 class DidyoumeanAppController extends AppController {
 
     var $version = '1.0';
-
+    var $layout = "admin";
+    
     function beforeFilter() {
         Cache::config('didyoumean', array(
             'engine' => 'File',
@@ -25,7 +26,7 @@ class DidyoumeanAppController extends AppController {
     }
 
     function checkVersion(){
-        $cache = Cache::read('Didyoumean_checkVersion');
+        /*$cache = Cache::read('Didyoumean_checkVersion');
         if ($cache !== false){
             return $cache;
         }
@@ -38,6 +39,9 @@ class DidyoumeanAppController extends AppController {
         else{
             return 'OK';
         }
+         *
+         */
+        return "OK";
     }
 }
 

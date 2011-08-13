@@ -6,8 +6,8 @@
             <th><?php echo $this->Paginator->sort('string');?></th>
             <th><?php echo $this->Paginator->sort('count');?></th>
             <th>Language</th>
-            <th>Will return</th>
-            <th>User choices</th>
+            <!--th>Will return</th>
+            <th>User choices</th-->
 
         </tr>
         <?php
@@ -24,9 +24,9 @@
             <td><?php echo $didyoumeanSearch['DidyoumeanSearch']['string']; ?>&nbsp;</td>
             <td><?php echo $didyoumeanSearch['DidyoumeanSearch']['count']; ?>&nbsp;</td>
             <td><?php echo $didyoumeanSearch['DidyoumeanLanguage']['name']; ?>&nbsp;</td>
-            <td>
+            <!--td>
                     <?php
-                    if (!empty($didyoumeanSearch['return'])) {
+                    /*if (!empty($didyoumeanSearch['return'])) {
                         foreach ($didyoumeanSearch['return'] as $return) {
                             echo $return['suggestion_string'] . "(".$return['type'].")<br/>";
                         }
@@ -46,8 +46,10 @@
                     if($didyoumeanSearch['InDictionary'] == false) {
                     //echo $this->Html->link("This word is not in the dictionary. Do you want to add it?",array('plugin' => 'didyoumean','controller' => 'didyoumean_dictionaries','action' => 'addWord', $didyoumeanSearch['DidyoumeanSearch']['string']));
                     }
+                     *
+                     */
                     ?>
-            </td>
+            </td-->
         </tr>
         <?php endforeach; ?>
     </table>

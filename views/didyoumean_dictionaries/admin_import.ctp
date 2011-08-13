@@ -9,7 +9,3 @@
 	</fieldset>
 <?php echo $this->Form->end(__('Submit', true));?>
 </div>
-<div class="actions">
-    <?php echo $this->element('menu'); ?>
-    <?php echo $this->element('dictionary_menu'); ?>
-</div>

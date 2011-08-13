@@ -1,33 +1,33 @@
 <?php
+
 class DidyoumeanDictionary extends DidyoumeanAppModel {
+
     var $name = 'DidyoumeanDictionary';
     var $validate = array(
         'word' => array(
             'notempty' => array(
-            'rule' => array('notempty'),
+                'rule' => array('notempty'),
             ),
         )
     );
-
     var $hasMany = array(
         'DidyoumeanChoice' => array(
-        'className' => 'Didyoumean.DidyoumeanChoice',
-        'foreignKey' => 'dictionary_id',
-        'dependent' => true,
-        'conditions' => '',
-        'fields' => '',
-        'order' => ''
+            'className' => 'Didyoumean.DidyoumeanChoice',
+            'foreignKey' => 'dictionary_id',
+            'dependent' => true,
+            'conditions' => '',
+            'fields' => '',
+            'order' => ''
         )
     );
-
     var $belongsTo = array(
-            'DidyoumeanLanguage' => array(
-                    'className' => 'DidyoumeanLanguage',
-                    'foreignKey' => 'language_id',
-                    'conditions' => '',
-                    'fields' => '',
-                    'order' => ''
-            )
+        'DidyoumeanLanguage' => array(
+            'className' => 'DidyoumeanLanguage',
+            'foreignKey' => 'language_id',
+            'conditions' => '',
+            'fields' => '',
+            'order' => ''
+        )
     );
 
     /*
@@ -35,10 +35,9 @@ class DidyoumeanDictionary extends DidyoumeanAppModel {
      * @return array Returns an array with: all the words from the dictionary in the database
      */
 
-
     function getListOfWords() {
-
-        if (Configure::read('Didyoumean.use_cache')) {
+        $setting = ClassRegistry::init('Didyoumean.DidyoumeanSetting');
+        if ($setting->get('language')) {
             $list = Cache::read('getListOfWords');
             if ($list !== false) {
                 return $list;
@@ -50,8 +49,8 @@ class DidyoumeanDictionary extends DidyoumeanAppModel {
         foreach ($words as $word) {
             $result[$word['DidyoumeanDictionary']['id']] = $word['DidyoumeanDictionary']['word'];
         }
-        if (Configure::read('Didyoumean.use_cache')) {
-            Cache::write('getListOfWords',$result);
+        if ($setting->get('use_cache')) {
+            Cache::write('getListOfWords', $result);
         }
         return $result;
     }
@@ -63,28 +62,29 @@ class DidyoumeanDictionary extends DidyoumeanAppModel {
      */
 
     function getRelatedWords($search_string) {
-        if (Configure::read('Didyoumean.get_related_words')) {
-            $this->writelog('started: ' . __FUNCTION__ . ' with: ' . print_r(func_get_args(),true), 'didyoumean');
-            if (Configure::read('Didyoumean.use_cache')) {
-                $list = Cache::read('getWordsContaining_'.$search_string);
+        $setting = ClassRegistry::init('Didyoumean.DidyoumeanSetting');
+        if ($setting->get('get_related_words')) {
+            $this->writelog('started: ' . __FUNCTION__ . ' with: ' . print_r(func_get_args(), true), 'didyoumean');
+            if ($setting->get('use_cache')) {
+                $list = Cache::read('getWordsContaining_' . $search_string);
                 if ($list !== false) {
-                    $this->writelog('ended: ' . __FUNCTION__ . ' with: ' . print_r($link,true), 'didyoumean');
+                    $this->writelog('ended: ' . __FUNCTION__ . ' with: ' . print_r($link, true), 'didyoumean');
                     return $list;
                 }
             }
             $words = $this->find('all',
-                array('conditions' => array(
-                "AND" => array(
-                'DidyoumeanDictionary.word LIKE' => "%$search_string%",
-                'DidyoumeanDictionary.word !=' => "$search_string"))));
+                            array('conditions' => array(
+                                    "AND" => array(
+                                        'DidyoumeanDictionary.word LIKE' => "%$search_string%",
+                                        'DidyoumeanDictionary.word !=' => "$search_string"))));
             $result = array();
             foreach ($words as $word) {
                 $result[] = $word['DidyoumeanDictionary']['word'];
             }
-            if (Configure::read('Didyoumean.use_cache')) {
-                Cache::write('getWordsContaining_'.$search_string,$result);
+            if ($setting->get('use_cache')) {
+                Cache::write('getWordsContaining_' . $search_string, $result);
             }
-            $this->writelog('ended: ' . __FUNCTION__ . ' with: ' . print_r($result,true), 'didyoumean');
+            $this->writelog('ended: ' . __FUNCTION__ . ' with: ' . print_r($result, true), 'didyoumean');
             return $result;
         }
     }
@@ -96,15 +96,16 @@ class DidyoumeanDictionary extends DidyoumeanAppModel {
      * @return array Returns an array with: user choices of that word, exact match and close matches to the search string
      */
 
-    function didYouMean($search_string,$search_id) {
-    //write log (only if debug == true)
-        $this->writelog('started: ' . __FUNCTION__ . ' with: ' . print_r(func_get_args(),true), 'didyoumean');
+    function didYouMean($search_string, $search_id) {
+        $setting = ClassRegistry::init('Didyoumean.DidyoumeanSetting');
+        //write log (only if debug == true)
+        $this->writelog('started: ' . __FUNCTION__ . ' with: ' . print_r(func_get_args(), true), 'didyoumean');
         // check for cache (only if use_cache == true)
         $search_string = strtolower($search_string);
-        if (Configure::read('Didyoumean.use_cache')) {
-            $list = Cache::read('didYouMean_'.$search_string,'didyoumean');
+        if ($setting->get('use_cache')) {
+            $list = Cache::read('didYouMean_' . $search_string, 'didyoumean');
             if ($list !== false) {
-                $this->writelog('ended: (returned cache): ' . __FUNCTION__ . ' with: ' . print_r($list,true), 'didyoumean');
+                $this->writelog('ended: (returned cache): ' . __FUNCTION__ . ' with: ' . print_r($list, true), 'didyoumean');
                 return $list;
             }
         }
@@ -112,20 +113,20 @@ class DidyoumeanDictionary extends DidyoumeanAppModel {
         $words = $this->getListOfWords();
         $result = array();
         // get user choices
-        $choices = $this->DidyoumeanChoice->find('all',array('conditions' => array('search_id' => $search_id),'order' => 'DidyoumeanChoice.count desc'));
+        $choices = $this->DidyoumeanChoice->find('all', array('conditions' => array('search_id' => $search_id), 'order' => 'DidyoumeanChoice.count desc'));
         // check if any user choices
         if (!empty($choices)) {
-        // get minimum percentage & minimum count
-            $minimum_user_choice_percentage = Configure::read('Didyoumean.minimum_user_choice_percentage');
-            $minimum_user_choice_count = Configure::read('Didyoumean.minimum_user_choice_count');
-            $this->writelog('got following choices: '.  print_r($choices,true), 'didyoumean');
+            // get minimum percentage & minimum count
+            $minimum_user_choice_percentage = $setting->get('minimum_user_choice_percentage');
+            $minimum_user_choice_count = $setting->get('minimum_user_choice_count');
+            $this->writelog('got following choices: ' . print_r($choices, true), 'didyoumean');
             // foreach choice check if the choice should be added to the output
-            foreach ($choices as $key=>$choice) {
-                
+            foreach ($choices as $key => $choice) {
+
                 $percentage = $choice['DidyoumeanChoice']['count'] / $choice['DidyoumeanSearch']['count'] * 100;
                 // if conditions from config file is true added to the output
                 if ($minimum_user_choice_percentage < $percentage &&
-                    $minimum_user_choice_count < $choice['DidyoumeanChoice']['count']) {
+                        $minimum_user_choice_count < $choice['DidyoumeanChoice']['count']) {
 
                     $word = $choice['DidyoumeanDictionary']['word'];
                     $suggestion_id = $choice['DidyoumeanDictionary']['id'];
@@ -138,28 +139,29 @@ class DidyoumeanDictionary extends DidyoumeanAppModel {
                     $data['search_id'] = $search_id;
                     $data['suggestion_string'] = $word;
                     $data['suggestion_id'] = $suggestion_id;
+                    $data['text'] = $setting->getText();
                     $result[] = $data;
                 }
             }
         }
         // each each word in the DB for close or exact match
-        foreach ($words as $key=>$word) {
-        // calculate the distance between the input word and the current word
-        // change these to edit levenshtein parameters
-        // check: http://php.net/manual/en/function.levenshtein.php
+        foreach ($words as $key => $word) {
+            // calculate the distance between the input word and the current word
+            // change these to edit levenshtein parameters
+            // check: http://php.net/manual/en/function.levenshtein.php
             $cost_ins = 1;
             $cost_rep = 1;
             $cost_del = 1;
             // get the levenshtein distance
             $lev = levenshtein($search_string, $word, $cost_ins, $cost_rep, $cost_del);
             // get the levenshtein distance in percentage
-            $lev_percent = $lev / strlen($word)*100;
+            $lev_percent = $lev / strlen($word) * 100;
             // get the maxium deviation for the word
             $devitation = $this->getMaxDeviation($search_string);
             // check for an exact match
             if ($lev == 0) {
                 $suggestions = $this->getRelatedWords($word);
-                $data= array();
+                $data = array();
                 $data['type'] = 'match';
                 $data['search_string'] = $search_string;
                 $data['search_id'] = $search_id;
@@ -168,8 +170,9 @@ class DidyoumeanDictionary extends DidyoumeanAppModel {
                 $data['max_devitation'] = $devitation;
                 $data['suggestion_id'] = $key;
                 $data['related'] = $suggestions;
+                $data['text'] = $setting->getText();
                 $result[] = $data;
-                $this->writelog('got exact match: '.  print_r($data,true), 'didyoumean');
+                $this->writelog('got exact match: ' . print_r($data, true), 'didyoumean');
             }
             // check if it's a close match (within maxDeviation) and NOT an exact match
             if ($lev_percent <= $devitation && $lev != 0) {
@@ -183,20 +186,20 @@ class DidyoumeanDictionary extends DidyoumeanAppModel {
                 $data['max_devitation'] = $devitation;
                 $data['suggestion_id'] = $key;
                 $data['related'] = $suggestions;
+                $data['text'] = $setting->getText();
                 $result[] = $data;
-                $this->writelog('got close match: '.  print_r($data,true), 'didyoumean');
+                $this->writelog('got close match: ' . print_r($data, true), 'didyoumean');
             }
-
         }
         // if cache enabled: write it
-        if (Configure::read('Didyoumean.use_cache')) {
-            Cache::write('didYouMean_'.$search_string,$result,'didyoumean');
-            $this->writelog('wrote cache:'.  print_r($result,true), 'didyoumean');
+        if ($setting->get('use_cache')) {
+            Cache::write('didYouMean_' . $search_string, $result, 'didyoumean');
+            $this->writelog('wrote cache:' . print_r($result, true), 'didyoumean');
         }
         // log it if debug is enabled
-        $this->writelog('ended: ' . __FUNCTION__ . ' returned: ' . print_r($result,true), 'didyoumean');
-        if (empty($result) && Configure::read('Didyoumean.help')){
-            $this->log('"'.$search_string.'" did not return any suggestions. Maybe you should add some?','didyoumean_help');
+        $this->writelog('ended: ' . __FUNCTION__ . ' returned: ' . print_r($result, true), 'didyoumean');
+        if (empty($result) && $setting->get('help')) {
+            $this->log('"' . $search_string . '" did not return any suggestions. Maybe you should add some?', 'didyoumean_help');
         }
         return $result;
     }
@@ -236,11 +239,13 @@ class DidyoumeanDictionary extends DidyoumeanAppModel {
      */
 
     function writeLog($msg, $type = null) {
+        $setting = ClassRegistry::init('Didyoumean.DidyoumeanSetting');
         // if debug is enabled write the log
-        if (Configure::read('Didyoumean.debug')) {
+        if ($setting->get('debug')) {
             $this->log($msg, $type);
         }
     }
 
 }
+
 ?>

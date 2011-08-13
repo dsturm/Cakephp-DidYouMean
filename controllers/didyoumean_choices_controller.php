@@ -3,12 +3,12 @@ class DidyoumeanChoicesController extends DidyoumeanAppController {
 
 	var $name = 'DidyoumeanChoices';
 
-	function index() {
+	function admin_index() {
 		$this->DidyoumeanChoice->recursive = 0;
 		$this->set('didyoumeanChoices', $this->paginate());
 	}
 
-	function view($id = null) {
+	function admin_view($id = null) {
 		if (!$id) {
 			$this->Session->setFlash(__('Invalid didyoumean choice', true));
 			$this->redirect(array('action' => 'index'));
@@ -16,7 +16,7 @@ class DidyoumeanChoicesController extends DidyoumeanAppController {
 		$this->set('didyoumeanChoice', $this->DidyoumeanChoice->read(null, $id));
 	}
 
-	function add() {
+	function admin_add() {
 		if (!empty($this->data)) {
 			$this->DidyoumeanChoice->create();
 			if ($this->DidyoumeanChoice->save($this->data)) {
@@ -31,7 +31,7 @@ class DidyoumeanChoicesController extends DidyoumeanAppController {
 		$this->set(compact('didyoumeanSearches', 'didyoumeanDictionaries'));
 	}
 
-	function edit($id = null) {
+	function admin_edit($id = null) {
 		if (!$id && empty($this->data)) {
 			$this->Session->setFlash(__('Invalid didyoumean choice', true));
 			$this->redirect(array('action' => 'index'));
@@ -52,7 +52,7 @@ class DidyoumeanChoicesController extends DidyoumeanAppController {
 		$this->set(compact('didyoumeanSearches', 'didyoumeanDictionaries'));
 	}
 
-	function delete($id = null) {
+	function admin_delete($id = null) {
 		if (!$id) {
 			$this->Session->setFlash(__('Invalid id for didyoumean choice', true));
 			$this->redirect(array('action'=>'index'));
