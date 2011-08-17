@@ -1,3 +1,11 @@
+Did you mean plugin for Croogo CMS
+
+Description:
+This will help to suggest what to search for, when people use the search function in croogo.
+
+Examples:
+You have a post called (or containing) the string "continuous integration", if the user search for continouos (spelled wrong) it will suggest continuous 
+
 HOW TO INSTALL:
 
 1. copy didyoumean folder to plugins/
