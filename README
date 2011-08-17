@@ -1,0 +1,20 @@
+HOW TO INSTALL:
+
+1. copy didyoumean folder to plugins/
+
+copy didyoumean folder to plugins/
+
+2. insert this helper in nodes_controller:
+
+var $helpers = array('didyoumean.didyoumean');
+
+3. insert these lines in the buttom of nodes_controller.php search function:
+$suggestions = $this->requestAction('didyoumean/didyoumean/search/' . $q);
+$this->set('suggestions', $suggestions);
+
+4. insert the following in views/nodes/search.ctp line 4:
+
+if (!empty($suggestions)) {
+        echo $didyoumean->suggestionLinks($suggestions);
+    }
+
