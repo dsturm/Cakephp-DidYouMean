@@ -26,3 +26,10 @@ if (!empty($suggestions)) {
         echo $didyoumean->suggestionLinks($suggestions);
     }
 
+
+5. Goto the Didyoumean settings page, click 'Auto import' to import all the words used in the CMS. By looking in all the nodes in the current installation. You must to this every time you add content and what it to be searchable
+
+
+How it works?
+
+For the plugin to work it needs a dictionary. The dictionary must be filled up with words that are searchable for the user
