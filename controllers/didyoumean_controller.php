@@ -8,7 +8,8 @@ class DidyoumeanController extends DidyoumeanAppController {
         'Didyoumean.DidyoumeanDictionary',
         'Didyoumean.DidyoumeanChoice',
         'Didyoumean.DidyoumeanLanguage',
-        'Didyoumean.DidyoumeanSetting');
+        'Didyoumean.DidyoumeanSetting',
+        'Setting');
     var $helpers = array('xml');
 
     function beforeFilter() {
@@ -118,13 +119,15 @@ class DidyoumeanController extends DidyoumeanAppController {
     }
 
     private function getLanguageId() {
+        $lang = $this->Setting->findByKey('Site.locale');
         if ($this->DidyoumeanSetting->get('language') != false) {
             // look for application language
-            $language = $this->DidyoumeanLanguage->findByName(Configure::read('language'));
+            $language = $this->DidyoumeanLanguage->findByName($lang['Setting']['value']);
         } else {
             // else use default language
             $language = $this->DidyoumeanLanguage->findByName($this->DidyoumeanSetting->get('language'));
         }
+
         // get the ID of the language
         $language_id = $language['DidyoumeanLanguage']['id'];
         return $language_id;
@@ -176,6 +179,9 @@ class DidyoumeanController extends DidyoumeanAppController {
     function admin_settings() {
         $this->set('title_for_layout', __('Did you mean settings', true));
         $this->set('settings', $this->DidyoumeanSetting->find('all'));
+        $this->set('search_count', $this->DidyoumeanSearch->find('count'));
+        $this->set('word_count', $this->DidyoumeanDictionary->find('count'));
+
 
     }
 
@@ -189,6 +195,8 @@ class DidyoumeanController extends DidyoumeanAppController {
                 $this->Session->setFlash(__('The didyoumean setting has been saved', true));
                 $this->redirect(array('action' => 'settings'));
             } else {
+                $this->data = $this->DidyoumeanSetting->read(null, $id);
+                $this->set($this->data);
                 $this->Session->setFlash(__('The didyoumean setting could not be saved. Please, try again.', true));
             }
         }

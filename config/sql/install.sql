@@ -52,12 +52,12 @@ CREATE TABLE IF NOT EXISTS `didyoumean_languages` (
 --
 
 INSERT INTO `didyoumean_languages` (`id`, `name`) VALUES
-(1, 'en'),
-(2, 'fr'),
-(3, 'es'),
-(4, 'dk'),
-(5, 'it'),
-(6, 'de');
+(1, 'eng'),
+(2, 'fra'),
+(3, 'spa'),
+(4, 'dan'),
+(5, 'ita'),
+(6, 'ger');
 
 -- --------------------------------------------------------
 
@@ -91,7 +91,7 @@ CREATE TABLE IF NOT EXISTS `didyoumean_settings` (
   `value` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `type` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=16 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=17 ;
 
 --
 -- Data dump for tabellen `didyoumean_settings`
@@ -106,9 +106,10 @@ INSERT INTO `didyoumean_settings` (`id`, `name`, `description`, `value`, `type`)
 (6, 'minimum_user_choice_count', 'the minimum number of choices a suggestion should have before its shown. Values false / any positive integer', '0', 'int'),
 (7, 'minimum_user_choice_percentage', 'the minimum percentage (user choices / search on this word) of choices a suggestion should have before its shown. Values false / any positive integer <= 100', '0', 'int'),
 (8, 'help', 'Write to a log file if a search does not return any suggestions?. Values true / false', '1', 'boolean'),
-(9, 'language', 'Default language when Configure::read(language) returns false', 'en', 'text'),
-(10, 'text_en', 'The didyoumean text when suggesting new search in english', 'Did you mean "%s"?', 'text'),
-(12, 'text_dk', 'The didyoumean text when suggesting new search in danish', 'Mente du "%s"?', 'text'),
-(13, 'text_de', 'The didyoumean text when suggesting new search in german', 'Meinten Sie "%s"?', 'text'),
-(14, 'text_fr', 'The didyoumean text when suggesting new search in french', 'Vouliez-vous dire "s%"?', 'text'),
-(15, 'text_it', 'The didyoumean text when suggesting new search in italian', 'Forse cercavi "s%"?', 'text');
+(9, 'language', 'Default language when Configure::read(language) returns false', 'eng', 'text'),
+(10, 'text_eng', 'The didyoumean text when suggesting new search in english', 'Did you mean "%s"?', 'text'),
+(12, 'text_dan', 'The didyoumean text when suggesting new search in danish', 'Mente du "%s"?', 'text'),
+(13, 'text_ger', 'The didyoumean text when suggesting new search in german', 'Meinten Sie "%s"?', 'text'),
+(14, 'text_fra', 'The didyoumean text when suggesting new search in french', 'Vouliez-vous dire "s%"?', 'text'),
+(15, 'text_ita', 'The didyoumean text when suggesting new search in italian', 'Forse cercavi "s%"?', 'text'),
+(16, 'text_spa', 'The didyoumean text when suggesting new search in spanish', 'A qué te referías "%s"?', 'text');
