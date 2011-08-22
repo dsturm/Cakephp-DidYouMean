@@ -3,7 +3,7 @@
 class DidyoumeanAppController extends AppController {
 
     var $version = '1.0';
-    var $layout = "admin";
+    var $components = array('Auth');
 
     function beforeFilter() {
         Cache::config('didyoumean', array(
@@ -22,6 +22,10 @@ class DidyoumeanAppController extends AppController {
 
         $this->set('version', $this->version);
         $this->set('checkVersion', $this->checkVersion());
+
+        if ($this->isCroogoInstalled()){
+            $this->layout = 'admin';
+        }
     }
 
     function checkVersion() {
@@ -58,6 +62,10 @@ class DidyoumeanAppController extends AppController {
         }
         return "OK";
         */
+    }
+
+    function isCroogoInstalled(){
+        return is_file(CONFIGS . 'croogo_bootstrap.php');
     }
 
 }

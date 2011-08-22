@@ -8,17 +8,15 @@ class DidyoumeanController extends DidyoumeanAppController {
         'Didyoumean.DidyoumeanDictionary',
         'Didyoumean.DidyoumeanChoice',
         'Didyoumean.DidyoumeanLanguage',
-        'Didyoumean.DidyoumeanSetting',
-        'Setting');
+        'Didyoumean.DidyoumeanSetting');
     var $helpers = array('xml');
 
     function beforeFilter() {
         $this->Auth->Allow(array('search', 'suggestion'));
-        //Configure::load('Didyoumean.didyoumean');
         parent::beforeFilter();
     }
 
-    function index() {
+    function admin_index() {
         // @todo: Add you own security check!
         $this->redirect('/admin/didyoumean/didyoumean/settings');
     }
@@ -119,8 +117,13 @@ class DidyoumeanController extends DidyoumeanAppController {
     }
 
     private function getLanguageId() {
-        $lang = $this->Setting->findByKey('Site.locale');
-        if ($this->DidyoumeanSetting->get('language') != false) {
+        if ($this->DidyoumeanSetting->get('language') == false) {
+            if ($this->isCroogoInstalled()){
+                App::import('Model','Setting');
+                $lang = $this->Setting->findByKey('Site.locale');
+            }else{
+                $this->cakeError('languageNotDefined');
+            }
             // look for application language
             $language = $this->DidyoumeanLanguage->findByName($lang['Setting']['value']);
         } else {

@@ -4,6 +4,8 @@ class DidyoumeanDictionariesController extends DidyoumeanAppController {
 
     var $name = 'DidyoumeanDictionaries';
 
+    var $components = array('Session');
+
     function admin_index() {
         $this->DidyoumeanDictionary->recursive = 0;
         $this->set('didyoumeanDictionaries', $this->paginate());
@@ -53,39 +55,44 @@ class DidyoumeanDictionariesController extends DidyoumeanAppController {
     }
 
     function admin_magicimport() {
-        App::import('Model', 'Node');
-        $this->Node->recursive = 0;
-        $nodes = $this->Node->find('all', array(
-                    'fields' => array('Node.body', 'Node.title')
-                ));
-        
-        $output = array();
-        foreach ($nodes as $node) {
-            $body = $node['Node']['body'];
-            $title = $node['Node']['title'];
+        if ($this->isCroogoInstalled()) {
+            App::import('Model', 'Node');
+            $this->Node->recursive = 0;
+            $nodes = $this->Node->find('all', array(
+                        'fields' => array('Node.body', 'Node.title')
+                    ));
 
-            $body = split(" ", $body);
-            $title = split(" ", $title);
-            $words = array_merge($body,$title);
-            $i = 0;
-            foreach ($words as $word) {
-                $word = strip_tags($word);
-                $word = str_replace(array(".",",","\n"), "", $word);
-                $word = strtolower($word);
-                $exist = $this->DidyoumeanDictionary->findByWord($word);
-                if (empty($exist)){
-                    $i++;
-                    $data = array();
-                    $this->DidyoumeanDictionary->create();
-                    $data['DidyoumeanDictionary']['word'] = $word;
-                    $data['DidyoumeanDictionary']['language_id'] = 1;
-                    $this->DidyoumeanDictionary->save($data);
+            $output = array();
+            foreach ($nodes as $node) {
+                $body = $node['Node']['body'];
+                $title = $node['Node']['title'];
+
+                $body = split(" ", $body);
+                $title = split(" ", $title);
+                $words = array_merge($body, $title);
+                $i = 0;
+                foreach ($words as $word) {
+                    $word = strip_tags($word);
+                    $word = str_replace(array(".", ",", "\n"), "", $word);
+                    $word = strtolower($word);
+                    $exist = $this->DidyoumeanDictionary->findByWord($word);
+                    if (empty($exist)) {
+                        $i++;
+                        $data = array();
+                        $this->DidyoumeanDictionary->create();
+                        $data['DidyoumeanDictionary']['word'] = $word;
+                        $data['DidyoumeanDictionary']['language_id'] = 1;
+                        $this->DidyoumeanDictionary->save($data);
+                    }
                 }
             }
+            // TODO: Delete cache files
+            $this->Session->setFlash(__("$i new words imported", true));
+            $this->redirect($this->referer());
+        }else{
+            $this->Session->setFlash(__("Croogo not installed, magic import only works with croogo", true));
+            $this->redirect($this->referer());
         }
-        // TODO: Delete cache files
-        $this->Session->setFlash(__("$i new words imported", true));
-        $this->redirect($this->referer());
     }
 
     function admin_add() {

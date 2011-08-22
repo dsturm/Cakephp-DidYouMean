@@ -34,10 +34,14 @@ class DidyoumeanSetting extends DidyoumeanAppModel {
         return $value['DidyoumeanSetting']['value'];
     }
 
-    function getText(){
-        $setting = ClassRegistry::init('Setting');
-        $language = $setting->findByKey('Site.locale');
-        $language = $language['Setting']['value'];
+    function getText() {
+        if ($this->isCroogoInstalled()) {
+            $setting = ClassRegistry::init('Setting');
+            $language = $setting->findByKey('Site.locale');
+            $language = $language['Setting']['value'];
+        } else {
+            $language = $this->get('language');
+        }
         $text = $this->findByName('text_' . $language);
         return $text['DidyoumeanSetting']['value'];
     }
