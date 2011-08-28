@@ -6,4 +6,7 @@
       <directory suffix=".php">Tests</directory>
     </testsuite>
   </testsuites>
+<logging>
+<!--log type="junit" target="result/logfile.xml" logIncompleteSkipped="false"/-->
+</logging>
 </phpunit>

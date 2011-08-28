@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+  <testsuite name="Tests" tests="2" assertions="2" failures="0" errors="0" time="14.055708">
+    <testsuite name="Cleancake_Search" file="/Applications/XAMPP/xamppfiles/htdocs/didyoumean_cleancake_dev/app/plugins/didyoumean/tests/selenium/Tests/cleancake_search.php" fullPackage="Cleancake" tests="1" assertions="1" failures="0" errors="0" time="6.589743">
+      <testcase name="testMyTestCase" class="Cleancake_Search" file="/Applications/XAMPP/xamppfiles/htdocs/didyoumean_cleancake_dev/app/plugins/didyoumean/tests/selenium/Tests/cleancake_search.php" line="13" assertions="1" time="6.589743"/>
+    </testsuite>
+    <testsuite name="Croogo_Search" file="/Applications/XAMPP/xamppfiles/htdocs/didyoumean_cleancake_dev/app/plugins/didyoumean/tests/selenium/Tests/croogo_search.php" fullPackage="Croogo" tests="1" assertions="1" failures="0" errors="0" time="7.465965">
+      <testcase name="testMyTestCase" class="Croogo_Search" file="/Applications/XAMPP/xamppfiles/htdocs/didyoumean_cleancake_dev/app/plugins/didyoumean/tests/selenium/Tests/croogo_search.php" line="13" assertions="1" time="7.465965"/>
+    </testsuite>
+  </testsuite>
+</testsuites>
